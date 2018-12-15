@@ -15,8 +15,8 @@ def setWordNum(num):
     global WORD_NUM
     WORD_NUM = num
 
-TRAIN_DATA_PATH = './train.txt'
-TEST_DATA_PATH = './test.answer.txt'
+TRAIN_DATA_PATH = './data/train.txt'
+TEST_DATA_PATH = './data/test.answer.txt'
 WEIGHT_PATH='./model/weight.h5'
 MODEL_PATH ='./model/mymodel.mod'
 FIGURE_PATH = './fig/'

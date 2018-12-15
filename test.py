@@ -33,7 +33,6 @@ def test(testDataDir, model=None):
         model.load_weights(WEIGHT_PATH)
 
     testData = open(testDataDir, 'r', encoding='utf-8')
-
     dict_file = open(VOCAB_PATH,'r', encoding='utf-8')
     vocab_dict = json.load(dict_file)
     dict_file.close()
