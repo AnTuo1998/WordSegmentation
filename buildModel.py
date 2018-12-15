@@ -4,11 +4,13 @@ from keras.layers import LSTM,Bidirectional,Dense,Embedding,Masking,TimeDistribu
 from keras.models import Sequential,load_model
 from keras.utils import plot_model
 from keras.callbacks import ModelCheckpoint
-from config import MAX_SEQ_LEN,WORD_DIM,MODEL_PATH,WORD_NUM
+from config import MAX_SEQ_LEN,WORD_DIM,MODEL_PATH,WORD_NUM,WEIGHT_PATH
 
-def build_model(model_path=None):
-    if model_path != None:
-        return load_model(filepath=model_path)
+def build_model(load_model=false):
+    if load_model:
+        model = load_model(MODEL_PATH)
+        model.load_weight(WEIGHT_PATH)
+        return model
 
     model = Sequential()    
     model.add(Embedding(input_dim=WORD_NUM, output_dim=WORD_DIM))
@@ -16,7 +18,7 @@ def build_model(model_path=None):
     lstm = LSTM(units=2 * MAX_SEQ_LEN, input_shape=(MAX_SEQ_LEN, WORD_DIM), 
                 return_sequences=True, dropout=0.4)
 
-    model.add(Bidirectional(layer=lstm, merge_mode='ave'))
+    model.add(Bidirectional(layer=lstm, merge_mode='concat'))
     # merge_mode means how to connect two vectors
 
     model.add(TimeDistributed(Dense(1, activation='sigmoid')))

@@ -39,6 +39,7 @@ def train():
     history = model.fit(X_train,y_train,validation_data=(X_val,y_val), 
                     epochs=EPOCH_SIZE, batch_size=BATCH_SIZE, callbacks=[checkpointer])
     model.save('word_spliter.mod')
+    model.save_weights('weights.h5')
     
     myplot(history)
 

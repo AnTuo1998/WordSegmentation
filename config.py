@@ -2,6 +2,7 @@ BATCH_SIZE = 1000
 EPOCH_SIZE = 20
 MAX_SEQ_LEN = 45
 WORD_DIM = 100
+WEIGHT_PATH='weight.h5'
 MODEL_PATH ='./mymodel.mod'
 WORD_NUM = 0
 def setSeqLen(len):
