@@ -6,7 +6,7 @@ from keras.utils import plot_model
 from keras.callbacks import ModelCheckpoint
 from config import MAX_SEQ_LEN,WORD_DIM,MODEL_PATH,WORD_NUM,WEIGHT_PATH
 
-def build_model(load_model=false):
+def build_model(load_model=False):
     if load_model:
         model = load_model(MODEL_PATH)
         model.load_weight(WEIGHT_PATH)
