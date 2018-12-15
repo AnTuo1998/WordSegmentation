@@ -16,6 +16,7 @@ def setWordNum(num):
     WORD_NUM = num
 
 TRAIN_DATA_PATH = './train.txt'
+TEST_DATA_PATH = './test.answer.txt'
 WEIGHT_PATH='./model/weight.h5'
 MODEL_PATH ='./model/mymodel.mod'
 FIGURE_PATH = './fig/'

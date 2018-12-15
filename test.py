@@ -1,7 +1,8 @@
 import re
 import json
-from config import MAX_SEQ_LEN,VOCAB_PATH
+from config import MAX_SEQ_LEN,VOCAB_PATH,WEIGHT_PATH,MODEL_PATH
 import numpy as np
+from keras.models import *
 from keras.preprocessing.sequence import pad_sequences
 symbols = re.compile(r'，|。|《|》|（|）|？|。|；')
 
@@ -26,7 +27,11 @@ def mark_splite(s,indexs,tag='  '):
     return marked
     
 
-def getTestData(testDataDir, model):
+def test(testDataDir, model=None):
+    if model == None:
+        model = load_model(MODEL_PATH)
+        model.load_weights(WEIGHT_PATH)
+
     testData = open(testDataDir, 'r', encoding='utf-8')
 
     dict_file = open(VOCAB_PATH,'r', encoding='utf-8')
@@ -45,7 +50,7 @@ def getTestData(testDataDir, model):
                 x = np.array([vocab_dict.get(c,0) for c in ele])
                 x = x.reshape(1 ,-1)    
                 print(x.shape) 
-                x = pad_sequences(x, maxlen=MAX_SEQ_LEN, padding="post", truncating='post');
+                x = pad_sequences(x, maxlen=MAX_SEQ_LEN, padding="post", truncating='post')
                 y = model.predict(x).reshape(1,-1)
                 # print(y.shape,y)
                 predicted_y = np.array(y[0][0:len(ele)]).reshape(1,-1)[0]

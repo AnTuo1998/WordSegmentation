@@ -1,11 +1,12 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import processData
-from config import TRAIN_DATA_PATH,EPOCH_SIZE,BATCH_SIZE,WEIGHT_PATH,MODEL_PATH,FIGURE_PATH
 from sklearn.model_selection import train_test_split
 from buildModel import build_model
 from keras.callbacks import ModelCheckpoint
-
+from test import test
+from config import TRAIN_DATA_PATH,EPOCH_SIZE,BATCH_SIZE,\
+                WEIGHT_PATH,MODEL_PATH,FIGURE_PATH,TEST_DATA_PATH
 
 
 def myplot(history):
@@ -34,11 +35,17 @@ def train():
     model = build_model()
 
     checkpointer = ModelCheckpoint(filepath=WEIGHT_PATH, verbose=1, save_best_only=True)
+    print("begin training")
     history = model.fit(X_train,y_train,validation_data=(X_val,y_val), 
                     epochs=EPOCH_SIZE, batch_size=BATCH_SIZE, callbacks=[checkpointer])
     model.save(MODEL_PATH)
     model.save_weights(WEIGHT_PATH)
 
     myplot(history)
+    return model
 
-    
+
+if __name__ == "__main__":
+    model = train()
+    test(TEST_DATA_PATH,model)
+
