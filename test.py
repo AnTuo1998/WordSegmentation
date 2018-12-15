@@ -2,7 +2,7 @@ import re
 import json
 from config import MAX_SEQ_LEN,VOCAB_PATH,WEIGHT_PATH,MODEL_PATH
 import numpy as np
-from keras.models import *
+from keras.models import load_model
 from keras.preprocessing.sequence import pad_sequences
 symbols = re.compile(r'，|。|《|》|（|）|？|。|；')
 
