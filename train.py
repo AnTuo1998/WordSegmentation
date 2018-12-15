@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import sys
 import processData
 from sklearn.model_selection import train_test_split
 from buildModel import build_model
@@ -28,14 +29,18 @@ def myplot(history):
     axes[1].set_title(label = 'Loss')
     plt.savefig(FIGURE_PATH+'fig1.png')
 
-def train():
+def train(isModel=False):
+    model = build_model(isModel)
+    if isModel:
+        return model
+
     X, y = processData.processTrainData(TRAIN_DATA_PATH)
     X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.1)
 
-    model = build_model()
-
     checkpointer = ModelCheckpoint(filepath=WEIGHT_PATH, verbose=1, save_best_only=True)
     print("begin training")
+    print(EPOCH_SIZE,BATCH_SIZE)
+   #  from config import EPOCH_SIZE,BATCH_SIZE
     history = model.fit(X_train,y_train,validation_data=(X_val,y_val), 
                     epochs=EPOCH_SIZE, batch_size=BATCH_SIZE, callbacks=[checkpointer])
     model.save(MODEL_PATH)
@@ -46,6 +51,9 @@ def train():
 
 
 if __name__ == "__main__":
-    model = train()
-    test(TEST_DATA_PATH,model)
+    if len(sys.argv) > 1:
+        model = train(True)
+    else:
+        model = train()
+    test(TEST_DATA_PATH, model)
 

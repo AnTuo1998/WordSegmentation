@@ -31,8 +31,10 @@ def getVocabDict(X):
     voc_dic['unknown-word'] = 0
     print('vocabulary length:',len(voc_dic))
 
-    with open('./vocabulary_dict.json','wt',encoding='utf8') as f:
-        json.dump(voc_dic,f)
+    from config import VOCAB_PATH
+    dict_file = open(VOCAB_PATH, 'w', encoding='utf-8')
+    json.dump(voc_dic,dict_file)
+    dict_file.close()
     return voc_dic
 
 def selectSeqLen(X):
@@ -69,14 +71,12 @@ def processTrainData(trainDataDir, SeqLen=True) -> dict:
     y = np.array(y)
     print(X[0])
     print(y[0])
+
     vocabDict = getVocabDict(X)
-    from config import VOCAB_PATH
-    dict_file = open(VOCAB_PATH, 'w', encoding='utf-8')
-    json.dump(vocabDict,dict_file)
-    dict_file.close()
+    
     X = np.array([[vocabDict[c] for c in x] for x in X])
     config.setWordNum(len(vocabDict))
-
+    print(len(vocabDict))
     if SeqLen:
         seqLen = selectSeqLen(X)
     else:
