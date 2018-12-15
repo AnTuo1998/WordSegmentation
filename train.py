@@ -28,7 +28,7 @@ def myplot(history):
     plt.savefig(FIGURE_PATH+'fig1.png')
 
 def train():
-    X, y, vocabDict = processData.processTrainData(TRAIN_DATA_PATH)
+    X, y = processData.processTrainData(TRAIN_DATA_PATH)
     X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.1)
 
     model = build_model()

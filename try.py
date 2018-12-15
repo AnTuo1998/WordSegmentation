@@ -1,5 +1,7 @@
 from config import MAX_SEQ_LEN
-import config
-print(config.MAX_SEQ_LEN)
-config.setSeqLen(10)
-print(config.MAX_SEQ_LEN)
+from test import division
+
+line1 = "woshi年后，不怎么远；ndqiofnw，进程《对飞》"
+line2 = 'ewfwefwe'
+line = division(line2)
+print(line,type(line))

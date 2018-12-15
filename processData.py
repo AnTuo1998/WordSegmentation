@@ -7,7 +7,7 @@ from keras.preprocessing.sequence import pad_sequences
 import numpy as np
 
 
-def infer_label(word_list):
+def infer_label(word_list) -> list:
     "0 = not 1 = connect"
     label = []
     for word in word_list:
@@ -22,7 +22,7 @@ def infer_label(word_list):
     return label
     
 
-def getVocabDict(X) ->dict:
+def getVocabDict(X):
     "build a vocabulary dictionary containing every words"
     voc = set()
     for x in X:
@@ -54,10 +54,11 @@ def selectSeqLen(X):
     return seqLen
 
 
-def processTrainData(TrainDataDir, SeqLen=True):
+def processTrainData(trainDataDir, SeqLen=True) -> dict:
+    "get data and decide length of sentence to train"
     X = []
     y = []
-    train_data = open(TrainDataDir,'r',encoding='utf-8')
+    train_data = open(trainDataDir,'r',encoding='utf-8')
     for line in train_data:
         one_list = line.split()
         label = infer_label(one_list)
@@ -69,6 +70,10 @@ def processTrainData(TrainDataDir, SeqLen=True):
     print(X[0])
     print(y[0])
     vocabDict = getVocabDict(X)
+    from config import VOCAB_PATH
+    dict_file = open(VOCAB_PATH, 'w', encoding='utf-8')
+    json.dump(vocabDict,dict_file)
+    dict_file.close()
     X = np.array([[vocabDict[c] for c in x] for x in X])
     config.setWordNum(len(vocabDict))
 
@@ -83,4 +88,6 @@ def processTrainData(TrainDataDir, SeqLen=True):
     y = pad_sequences(y, maxlen=MAX_SEQ_LEN, padding='post', truncating='post')
     # transform y into 3-dim tensor
     y = y.reshape(-1,MAX_SEQ_LEN,1) 
-    return X, y, vocabDict
+    return X, y
+
+
