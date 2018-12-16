@@ -1,8 +1,9 @@
 BATCH_SIZE = 256
-EPOCH_SIZE = 20
+EPOCH_SIZE = 25
 MAX_SEQ_LEN = 45
 WORD_DIM = 50
 WORD_NUM = 5168
+HIDDEN_NUM = 100
 def setSeqLen(len):
     global MAX_SEQ_LEN
     MAX_SEQ_LEN = len
