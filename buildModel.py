@@ -7,15 +7,16 @@ from keras.callbacks import ModelCheckpoint
 import keras
 from config import MAX_SEQ_LEN,WORD_DIM,MODEL_PATH,WEIGHT_PATH,FIGURE_PATH
 
-def build_model(isModel=False):
-    if isModel:
-        model = load_model(MODEL_PATH)
-        model.load_weights(WEIGHT_PATH)
+def build_model(modelName=None):
+    try:
+        model = load_model(MODEL_PATH+modelName+'.mod')
+        model.load_weights(WEIGHT_PATH+modelName+'.h5')
         return model
+    except NameError:
+        pass
 
     model = Sequential()    
     from config import WORD_NUM
-    print("wordnum",WORD_NUM)
 
     model.add(Embedding(input_dim=WORD_NUM, output_dim=WORD_DIM))
 
@@ -31,7 +32,7 @@ def build_model(isModel=False):
                     optimizer='adam', 
                     metrics=['accuracy'])
 
-    model.save(filepath = MODEL_PATH)
+    model.save(filepath = "./model"+modelName)
     model.summary()
     try:
         plot_model(model, to_file=FIGURE_PATH+'network.png')

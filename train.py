@@ -29,22 +29,22 @@ def myplot(history):
     axes[1].set_title(label = 'Loss')
     plt.savefig(FIGURE_PATH+'fig1.png')
 
-def train(isModel=False):
-    model = build_model(isModel)
-    if isModel:
+def train(name=None):
+    model = build_model(name)
+    if name == None:
         return model
 
     X, y = processData.processTrainData(TRAIN_DATA_PATH)
     X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.1)
 
-    checkpointer = ModelCheckpoint(filepath=WEIGHT_PATH, verbose=1, save_best_only=True)
+    checkpointer = ModelCheckpoint(filepath=WEIGHT_PATH+name+'.h5', verbose=1, save_best_only=True)
     print("begin training")
     print(EPOCH_SIZE,BATCH_SIZE)
    #  from config import EPOCH_SIZE,BATCH_SIZE
     history = model.fit(X_train,y_train,validation_data=(X_val,y_val), 
                     epochs=EPOCH_SIZE, batch_size=BATCH_SIZE, callbacks=[checkpointer])
-    model.save(MODEL_PATH)
-    model.save_weights(WEIGHT_PATH)
+    model.save(MODEL_PATH+name+'.mod')
+    model.save_weights(WEIGHT_PATH+name+'.mod')
 
     myplot(history)
     return model
@@ -52,7 +52,7 @@ def train(isModel=False):
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
-        model = train(True)
+        model = train(sys.argv[1])
     else:
         model = train()
     test(TEST_DATA_PATH, model)

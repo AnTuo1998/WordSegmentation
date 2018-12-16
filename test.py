@@ -1,9 +1,10 @@
 import re
+import sys
 import json
 import math
-from config import MAX_SEQ_LEN,VOCAB_PATH,WEIGHT_PATH,MODEL_PATH
+from config import MAX_SEQ_LEN,VOCAB_PATH,WEIGHT_PATH,MODEL_PATH,TEST_DATA_PATH
 import numpy as np
-from keras.models import load_model
+import keras.models
 from keras.preprocessing.sequence import pad_sequences
 symbols = re.compile(r'，|。|《|》|（|）|？|。|；')
 
@@ -30,11 +31,7 @@ def mark_splite(s,indexs,tag='  '):
     return marked
     
 
-def test(testDataDir, model=None):
-    if model == None:
-        model = load_model(MODEL_PATH)
-        model.load_weights(WEIGHT_PATH)
-
+def test(testDataDir, model):
     testData = open(testDataDir, 'r', encoding='utf-8')
     dict_file = open(VOCAB_PATH,'r', encoding='utf-8')
     vocab_dict = json.load(dict_file)
@@ -67,3 +64,9 @@ def test(testDataDir, model=None):
             count+=1
         res.write(' '.join(outstr)+"\n")
     res.close()
+
+if __name__ == '__main__':
+    model = keras.models.load_model(MODEL_PATH+sys.argv[1]+'.mod')
+    model.load_weights(WEIGHT_PATH+sys.argv[1]+'.h5')
+    test(TEST_DATA_PATH,model)
+    
