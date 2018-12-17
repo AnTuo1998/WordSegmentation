@@ -6,19 +6,21 @@ from config import MAX_SEQ_LEN,VOCAB_PATH,WEIGHT_PATH,MODEL_PATH,TEST_DATA_PATH
 import numpy as np
 import keras.models
 from keras.preprocessing.sequence import pad_sequences
-symbols = re.compile(r'，|。|《|》|（|）|？|。|；')
+symbols = re.compile(r'，|、|《|》|（|）|？|；|-')
 
 def division(line) -> list:
     pos = symbols.search(line)
     if pos == None:
-        if len(line) < MAX_SEQ_LEN:
+        if len(line) == 0:
+            return []
+        elif len(line) < MAX_SEQ_LEN:
             return [line]
         else:
             pos = math.floor(len(line)/2)
             return division(line[0:pos]) + division(line[pos:])
     else:
         pos = pos.span()[0]
-        return [line[:pos], line[pos]] + division(line[pos+1:])
+        return division(line[:pos]) + [line[pos]] + division(line[pos+1:])
 
 
 def mark_splite(s,indexs,tag='  '):

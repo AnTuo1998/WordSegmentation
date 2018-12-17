@@ -21,11 +21,11 @@ def build_model(modelName=None):
     model.add(Embedding(input_dim=WORD_NUM, output_dim=WORD_DIM))
 
     lstm = LSTM(HIDDEN_NUM, input_shape=(MAX_SEQ_LEN, WORD_DIM), 
-                return_sequences=True, dropout=0.3)
+                return_sequences=True, dropout=0.4)
 
     model.add(Bidirectional(layer=lstm, merge_mode='ave'))
     # merge_mode means how to connect two vectors
-    model.add(Bidirectional(LSTM(units=2 * HIDDEN_NUM,return_sequences=True, dropout=0.3), merge_mode='ave'))
+    model.add(Bidirectional(LSTM(units=2 * HIDDEN_NUM,return_sequences=True, dropout=0.4), merge_mode='ave'))
     model.add(TimeDistributed(Dense(1, activation='sigmoid')))
 
     model.compile(loss='binary_crossentropy', 
