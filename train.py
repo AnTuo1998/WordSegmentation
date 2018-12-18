@@ -27,7 +27,7 @@ def myplot(history):
     axes[1].set_xlabel(xlabel = 'epoch')
     axes[1].set_ylabel(ylabel = 'loss')
     axes[1].set_title(label = 'Loss')
-    plt.savefig(FIGURE_PATH+'fig1.png')
+    plt.savefig(FIGURE_PATH+'analysis.png')
 
 def train(name=None):
     model,isTrain = build_model(name)

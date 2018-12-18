@@ -25,17 +25,17 @@ def build_model(modelName=None):
 
     model.add(Bidirectional(layer=lstm, merge_mode='ave'))
     # merge_mode means how to connect two vectors
-    model.add(Bidirectional(LSTM(units=2 * HIDDEN_NUM,return_sequences=True, dropout=0.4), merge_mode='ave'))
+    model.add(Bidirectional(LSTM(units=HIDDEN_NUM,return_sequences=True, dropout=0.4), merge_mode='ave'))
     model.add(TimeDistributed(Dense(1, activation='sigmoid')))
 
     model.compile(loss='binary_crossentropy', 
                     optimizer='adam', 
                     metrics=['accuracy'])
 
-    model.save(filepath = MODEL_PATH+modelName)
+    model.save(filepath = MODEL_PATH+modelName+'.mod')
     model.summary()
     try:
-        plot_model(model, to_file=FIGURE_PATH+'network.png')
+        plot_model(model, to_file=FIGURE_PATH+'network.png',show_shapes=True)
     except ImportError:
         pass
     return model,False
