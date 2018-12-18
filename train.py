@@ -4,13 +4,14 @@ import sys
 import processData
 from sklearn.model_selection import train_test_split
 from buildModel import build_model
-from keras.callbacks import ModelCheckpoint
-from test import test
+from keras.callbacks import ModelCheckpoint,TensorBoard
+from test import test2
 from config import TRAIN_DATA_PATH,EPOCH_SIZE,BATCH_SIZE,\
                 WEIGHT_PATH,MODEL_PATH,FIGURE_PATH,TEST_DATA_PATH
 
 
 def myplot(history):
+    """plot loss and acc"""
     epoch = range(1, EPOCH_SIZE + 1)
     _, axes = plt.subplots(nrows = 2, ncols = 1, figsize = (12, 12))
     axes[0].plot(epoch, history.history['acc'], label = 'train')
@@ -42,7 +43,7 @@ def train(name=None):
     print(EPOCH_SIZE,BATCH_SIZE)
    #  from config import EPOCH_SIZE,BATCH_SIZE
     history = model.fit(X_train,y_train,validation_data=(X_val,y_val), 
-                    epochs=EPOCH_SIZE, batch_size=BATCH_SIZE, callbacks=[checkpointer])
+                    epochs=EPOCH_SIZE, batch_size=BATCH_SIZE, callbacks=[checkpointer,TensorBoard(log_dir='./logs/log')])
     model.save(MODEL_PATH+name+'.mod')
     model.save_weights(WEIGHT_PATH+name+'.h5')
 
@@ -55,5 +56,5 @@ if __name__ == "__main__":
         model = train(sys.argv[1])
     else:
         model = train()
-    test(TEST_DATA_PATH, model)
+    test2(TEST_DATA_PATH, model)
 

@@ -8,7 +8,7 @@ import numpy as np
 
 
 def infer_label(word_list) -> list:
-    "0 = not 1 = connect"
+    """0 = not 1 = connect"""
     label = []
     for word in word_list:
         if len(word) == 1:
@@ -22,25 +22,31 @@ def infer_label(word_list) -> list:
     return label
     
 
-def getVocabDict(X):
-    "build a vocabulary dictionary containing every words"
-    voc = set()
-    for x in X:
-        voc.update(x)
-    voc_dic = {k:i+1 for i,k in enumerate(voc)}
-    voc_dic['unknown-word'] = 0
-    print('vocabulary length:',len(voc_dic))
-
+def getVocabDict(X) -> dict:
+    """build a vocabulary dictionary containing every words"""
     from config import VOCAB_PATH
-    dict_file = open(VOCAB_PATH, 'w', encoding='utf-8')
-    json.dump(voc_dic,dict_file)
-    dict_file.close()
-    return voc_dic
+    try:
+        dict_file = open(VOCAB_PATH, 'r', encoding='utf-8')
+        voc_dic = json.load(dict_file)
+        dict_file.close()
+    except (NameError,OSError,FileNotFoundError):
+        voc = set()
+        for x in X:
+            voc.update(x)
+        voc_dic = {k:i+1 for i,k in enumerate(voc)}
+        voc_dic['unknown-word'] = 0
+        dict_file = open(VOCAB_PATH, 'w', encoding='utf-8')
+        json.dump(voc_dic,dict_file)
+        dict_file.close()
+    finally:
+        print('vocabulary length:',len(voc_dic))
+        return voc_dic
 
-def selectSeqLen(X):
+def selectSeqLen(X) -> int:
+    """Get a suitable len of a sentence"""
     x_lengths = [len(x) for x in X]
-    # plt.hist(x_lengths,bins=100,stacked=True,)#rwidth=0.8
-    # plt.show()
+    plt.hist(x_lengths,bins=100,stacked=True,)#rwidth=0.8
+    plt.savefig(config.FIGURE_PATH + 'data.png')
     print(max(x_lengths))
     len_counts = Counter(x_lengths)
 
@@ -56,7 +62,7 @@ def selectSeqLen(X):
     return seqLen
 
 
-def processTrainData(trainDataDir, SeqLen=True) -> dict:
+def processTrainData(trainDataDir, SeqLen=True) -> (list,list):
     "get data and decide length of sentence to train"
     X = []
     y = []
