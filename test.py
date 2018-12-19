@@ -96,10 +96,14 @@ def test2(testDataDir, model):
             print('  '.join(outstr))
             count += 1
         res.write('  '.join(outstr)+"\n")
+    testData.close()
     res.close()
 
 
 if __name__ == '__main__':
-    model = keras.models.load_model(MODEL_PATH+sys.argv[1]+'.mod')
-    model.load_weights(WEIGHT_PATH+sys.argv[1]+'.h5')
-    test2(TEST_DATA_PATH,model)
+    try:
+        model = keras.models.load_model(MODEL_PATH+sys.argv[1]+'.mod')
+        model.load_weights(WEIGHT_PATH+sys.argv[1]+'.h5')
+        test2(TEST_DATA_PATH,model)
+    except OSError:
+        print("Can't Find Model named "+sys.argv[1])
