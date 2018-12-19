@@ -106,4 +106,8 @@ if __name__ == '__main__':
         model.load_weights(WEIGHT_PATH+sys.argv[1]+'.h5')
         test2(TEST_DATA_PATH,model)
     except OSError:
-        print("Can't Find Model named "+sys.argv[1])
+        try:
+            model = keras.models.load_model(MODEL_PATH+sys.argv[1]+'.hdf5')
+            test2(TEST_DATA_PATH,model)
+        except OSError:
+            print("Can't Find Model named "+sys.argv[1])

@@ -1,6 +1,7 @@
 from collections import Counter
 import config
 import json
+import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from keras.preprocessing.sequence import pad_sequences
@@ -45,8 +46,11 @@ def getVocabDict(X) -> dict:
 def selectSeqLen(X) -> int:
     """Get a suitable len of a sentence"""
     x_lengths = [len(x) for x in X]
-    plt.hist(x_lengths,bins=100,stacked=True,)#rwidth=0.8
+    # plt.hist(x_lengths,bins=100,stacked=True,)#rwidth=0.8
+    sns.set_style('darkgrid')
+    sns.distplot(x_lengths, rug=True,norm_hist=True)
     plt.savefig(config.FIGURE_PATH + 'data.png')
+    
     print(max(x_lengths))
     len_counts = Counter(x_lengths)
 
