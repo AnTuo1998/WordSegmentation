@@ -11,8 +11,7 @@ from config import MAX_SEQ_LEN,WORD_DIM,HIDDEN_NUM, DROPOUT, \
 def build_model(modelName=None) -> keras.models:
     """build or load a model from the name"""
     try:
-        model = load_model(MODEL_PATH+modelName+'.mod')
-        model.load_weights(WEIGHT_PATH+modelName+'.h5')
+        model = load_model(MODEL_PATH+modelName+'.hdf5')
         return model,True
     except (NameError,OSError):
         pass
@@ -22,14 +21,18 @@ def build_model(modelName=None) -> keras.models:
 
     model.add(Embedding(input_dim=WORD_NUM, output_dim=WORD_DIM))
 
-    lstm1 = LSTM(HIDDEN_NUM, input_shape=(MAX_SEQ_LEN, WORD_DIM), 
+    lstm1 = LSTM(2 * HIDDEN_NUM, input_shape=(MAX_SEQ_LEN, WORD_DIM), 
                 return_sequences=True, dropout=DROPOUT)
 
     model.add(Bidirectional(layer=lstm1, merge_mode='ave'))
     # merge_mode means how to connect two vectors
-    lstm2 = LSTM(units=HIDDEN_NUM,return_sequences=True, dropout=DROPOUT)
+    lstm2 = LSTM(units=4 * HIDDEN_NUM,return_sequences=True, dropout=DROPOUT)
     
     model.add(Bidirectional(layer=lstm2, merge_mode='ave'))
+
+    lstm3 = LSTM(units=4 * HIDDEN_NUM,return_sequences=True, dropout=DROPOUT)
+    
+    model.add(Bidirectional(layer=lstm3, merge_mode='ave'))
     
     model.add(TimeDistributed(Dense(1, activation='sigmoid')))
 
@@ -40,6 +43,6 @@ def build_model(modelName=None) -> keras.models:
     model.save(filepath = MODEL_PATH+modelName+'.mod')
     model.summary()
     
-    plot_model(model, to_file=FIGURE_PATH+'network.png',show_shapes=True)
+    plot_model(model, to_file=FIGURE_PATH+modelName+'.network.png',show_shapes=True)
     
     return model,False
