@@ -1,14 +1,13 @@
 import matplotlib.pyplot as plt
-from sklearn.model_selection import train_test_split
 from keras.layers import LSTM,Bidirectional,Dense,Embedding,Masking,TimeDistributed
 from keras.models import Sequential,load_model
 from keras.utils import plot_model
 from keras.callbacks import ModelCheckpoint
 import keras
 from config import MAX_SEQ_LEN,WORD_DIM,HIDDEN_NUM, DROPOUT, \
-                    MODEL_PATH,WEIGHT_PATH,FIGURE_PATH,HIDDEN_NUM
+                    MODEL_PATH,FIGURE_PATH,HIDDEN_NUM
 
-def build_model(modelName=None) -> keras.models:
+def build_model(modelName: str) -> keras.models:
     """build or load a model from the name"""
     try:
         model = load_model(MODEL_PATH+modelName+'.hdf5')

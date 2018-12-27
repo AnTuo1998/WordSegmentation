@@ -2,11 +2,10 @@ import re
 import sys
 import json
 import math
-from config import MAX_SEQ_LEN,VOCAB_PATH,WEIGHT_PATH,MODEL_PATH,TEST_DATA_PATH
+from config import MAX_SEQ_LEN,VOCAB_PATH,MODEL_PATH,TEST_DATA_PATH
 import numpy as np
 import keras.models
 from keras.preprocessing.sequence import pad_sequences
-
 
 symbols = re.compile(r'，|、|《|》|（|）|？|；|-')
 
@@ -31,7 +30,7 @@ def merge(s,indexs,tag='  '):
             marked += z[0]
     return marked
 
-def test(testDataDir, model):
+def test(testDataDir:str, model) -> None:
     testData = open(testDataDir, 'r', encoding='utf-8')
     dict_file = open(VOCAB_PATH,'r', encoding='utf-8')
     vocab_dict = json.load(dict_file)

@@ -3,13 +3,11 @@ import config
 import json
 import re
 import math
-import seaborn as sns
 import matplotlib.pyplot as plt
-from sklearn.model_selection import train_test_split
 from keras.preprocessing.sequence import pad_sequences
 import numpy as np
 
-def infer_label(word_list) -> list:
+def infer_label(word_list: list) -> list:
     """0 = not 1 = connect"""
     label = []
     for word in word_list:
@@ -85,8 +83,8 @@ def division(line :str) -> list:
         sentenceList.append(sentence)
     return sentenceList
 
-def processTrainData(trainDataDir, SeqLen=True) -> (list,list):
-    "get data and decide length of sentence to train"
+def processTrainData(trainDataDir :str, SeqLen :bool=True) -> (list,list):
+    """no division of training data"""
     X = []
     y = []
     train_data = open(trainDataDir,'r',encoding='utf-8')
@@ -119,8 +117,8 @@ def processTrainData(trainDataDir, SeqLen=True) -> (list,list):
     y = y.reshape(-1,MAX_SEQ_LEN,1) 
     return X, y
 
-def processTrainData2(trainDataDir, SeqLen=True) -> (list,list):
-    "get data and decide length of sentence to train"
+def processTrainData2(trainDataDir:str, SeqLen:bool=True) -> (list,list):
+    "get divided data"
     X = []
     y = []
     train_data = open(trainDataDir,'r',encoding='utf-8')
